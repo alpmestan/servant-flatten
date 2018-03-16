@@ -17,23 +17,23 @@ import Servant.API
 --   For example, the following API type:
 --
 --   @
---   type API = Capture "foo" Int :>
---     ( Capture "bar" String :>
---         ( Get '[JSON] String :<|>
---           ReqBody '[JSON] Int :> Post '[JSON] Int
---         ) :<|>
---       Get '[JSON] Int
---     ) :<|>
---     Get '[JSON] [String]
+--   type API = 'Capture' "foo" 'Int' ':>'
+--     ( 'Capture' "bar" 'String' ':>'
+--         ( 'Get' '['JSON'] 'String' ':<|>'
+--           'ReqBody' '['JSON'] 'Int' ':>' 'Post' '['JSON'] 'Int'
+--         ) ':<|>'
+--       'Get' '['JSON'] 'Int'
+--     ) ':<|>'
+--     'Get' '['JSON'] ['String']
 --   @
 --
 --   gets transformed into:
 --
 --   @
---   Capture "foo" Int :> Capture "bar" String :> Get '[JSON] String :<|>
---   Capture "foo" Int :> Capture "bar" String :> ReqBody '[JSON] Int :> Post '[JSON] Int :<|>
---   Capture "foo" Int :> Get '[JSON] Int :<|>
---   Get '[JSON] [String]
+--   'Capture' "foo" 'Int' ':>' 'Capture' "bar" 'String' ':>' 'Get' '['JSON'] 'String' ':<|>'
+--   'Capture' "foo" 'Int' ':>' 'Capture' "bar" 'String' ':>' 'ReqBody' '[JSON] 'Int' ':>' 'Post' '['JSON'] 'Int' ':<|>'
+--   'Capture' "foo" 'Int' ':>' 'Get' '['JSON'] 'Int' ':<|>'
+--   'Get' '['JSON'] ['String']
 --   @
 --
 --   The main point of doing this is to avoid \"nested types\" for server-side handlers
@@ -43,8 +43,8 @@ import Servant.API
 --   To derive \"flat\" client functions for the API type above, @API@, you can do:
 --
 --   @
---   getfoobar :<|> postfoobar :<|> getfoo :<|> getstrings
---     = client $ flatten (Proxy :: Proxy API)
+--   getfoobar ':<|>' postfoobar ':<|>' getfoo ':<|>' getstrings
+--     = 'client' $ 'flatten' ('Proxy' :: 'Proxy' API)
 --   @
 --
 --   To serve an implementation for that API with \"flat\" handler types, you can do:
@@ -52,18 +52,18 @@ import Servant.API
 --   @
 --   -- we define all our handlers assuming all the arguments are distributed,
 --   -- and declare that this is an implementation for @Flat API@, not @API@.
---   server :: Server (Flat API)
+--   server :: Server ('Flat' API)
 --   server = (\foo bar -> return $ show (foo + bar))
---       :<|> (\foo bar body -> return $ show (foo + bar - body^2))
---       :<|> (\foo -> return (foo * 2))
---       :<|> (return ["hello", "world"])
+--       ':<|>' (\foo bar body -> return $ show (foo + bar - body^2))
+--       ':<|>' (\foo -> return (foo * 2))
+--       ':<|>' (return ["hello", "world"])
 --
---   api :: Proxy API
---   api = Proxy
+--   api :: 'Proxy' API
+--   api = 'Proxy'
 --
---   main :: IO
+--   main :: 'IO' ()
 --   main = Network.Wai.Handler.Warp.run 8080 $
---     serve (flatten api) server
+--     serve ('flatten' api) server
 --   @
 flatten :: Proxy api -> Proxy (Flat api)
 flatten Proxy = Proxy
@@ -74,8 +74,8 @@ type Flat api = Reassoc (Flatten (Reassoc (Flatten api)))
 -- so we apply them twice for now...
 
 -- | Completely flattens an API type by applying a few simple transformations.
---   The goal is to end up with an API type where things like @a :> (b :<|> c)@
---   are rewritten to @a :> b :<|> a :> c@, so as to have client with very simple
+--   The goal is to end up with an API type where things like @a ':>' (b ':<|>' c)@
+--   are rewritten to @a ':>' b ':<|>' a ':>' c@, so as to have client with very simple
 --   types, instead of "nested clients".
 type family Flatten (api :: k) :: k where
   Flatten ((a :: k) :> (b :<|> c)) = Flatten (a :> b) :<|> Flatten (a :> c)
