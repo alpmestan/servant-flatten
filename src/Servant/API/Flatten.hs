@@ -69,7 +69,7 @@ flatten :: Proxy api -> Proxy (Flat api)
 flatten Proxy = Proxy
 
 -- | Flatten and transform the API type a little bit.
-type Flat api = Reassoc (Flatten (Reassoc (Flatten api)))
+type Flat api = Reassoc (Flatten api)
 -- looks like Flatten/Reassoc are missing some opportunities the first time,
 -- so we apply them twice for now...
 
@@ -88,10 +88,14 @@ type family Redex a b (c :: k) :: * where
   Redex a b first = Flatten (first :> b)
 
 -- | Reassociates '(:<|>)' to the right.
-type family Reassoc api where
-  Reassoc ((a :<|> b) :<|> c) = Reassoc a :<|> Reassoc (b :<|> c)
-  Reassoc (a :<|> b) = a :<|> Reassoc b
-  Reassoc a = a
+type Reassoc api = ReassocBranch api '[]
+
+-- | Helper type family that "enumerates" the different endpoints left
+--   to right.
+type family ReassocBranch (currentAPI :: *) (otherEndpoints :: [*]) where
+  ReassocBranch (a :<|> b)        rest = ReassocBranch a (b ': rest)
+  ReassocBranch a                  '[] = a
+  ReassocBranch a          (b ': rest) = a :<|> ReassocBranch b rest
 
 -- * Utilities that we can define on a flat representation
 
