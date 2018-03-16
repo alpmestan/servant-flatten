@@ -9,7 +9,7 @@ license:             BSD3
 license-file:        LICENSE
 author:              Alp Mestanogullari
 maintainer:          alpmestan@gmail.com
-copyright:           2018 Alp Mestanogullari
+copyright:           2018 Alp Mestanogullari, Julian Arni
 category:            Web
 build-type:          Simple
 extra-source-files:  ChangeLog.md
