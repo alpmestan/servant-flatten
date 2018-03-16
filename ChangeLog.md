@@ -1,5 +1,5 @@
 # Revision history for servant-flatten
 
-## 0.1 -- YYYY-mm-dd
+## 0.1 -- 2017-03-16
 
-* First version. Released on an unsuspecting world.
+* First version.
