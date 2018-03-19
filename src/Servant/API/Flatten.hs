@@ -87,7 +87,7 @@ type family Redex a b (c :: k) :: * where
   Redex a a first = Flatten first :> a
   Redex a b first = Flatten (first :> b)
 
--- | Reassociates '(:<|>)' to the right.
+-- | Reassociates ':<|>' to the right.
 type Reassoc api = ReassocBranch api '[]
 
 -- | Helper type family that "enumerates" the different endpoints left

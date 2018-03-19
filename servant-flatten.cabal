@@ -1,5 +1,5 @@
 name:                servant-flatten
-version:             0.1
+version:             0.2
 synopsis:            Utilities for flattening servant API types
 description:         Utilities for flattening servant API types
                      .
