@@ -1,5 +1,5 @@
 name:                servant-flatten
-version:             0.1
+version:             0.2
 synopsis:            Utilities for flattening servant API types
 description:         Utilities for flattening servant API types
                      .
@@ -15,7 +15,7 @@ category:            Web
 build-type:          Simple
 extra-source-files:  ChangeLog.md, README.md
 cabal-version:       >=1.10
-tested-with:         GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.1
+tested-with:         GHC == 8.0.2, GHC == 8.2.2
 
 source-repository head
   type:     git
