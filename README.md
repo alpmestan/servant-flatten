@@ -34,5 +34,5 @@ Capture "foo" Int :> Get '[JSON] Int :<|>
 Get '[JSON] [String]
 ```
 
-See the documentation of `flatten` in `Servant.Flatten`
+See the documentation of `flatten` in `Servant.API.Flatten`
 for more.
